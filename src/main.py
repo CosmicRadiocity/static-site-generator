@@ -1,5 +1,6 @@
 from textnode import TextNode, TextType
 from leafnode import LeafNode
+import re
 
 def main():
     text_node = TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev")
@@ -47,6 +48,26 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             new_nodes.append(TextNode(split_node[i], node_type))
     
     return new_nodes
+
+def extract_markdown_images(text):
+    urls = re.findall(r"\(([^\(\)]*)\)", text)
+    alt_text = re.findall(r"!\[([^\[\]]*)\]", text)
+    tuples = []
+    for i in range(0, len(urls)):
+        trimmed_url = urls[i].replace("(", "").replace(")", "")
+        trimmed_alt = alt_text[i].replace("![", "").replace("]", "")
+        tuples.append((trimmed_alt, trimmed_url))
+    return tuples
+
+def extract_markdown_links(text):
+    urls = re.findall(r"\(([^\(\)]*)\)", text)
+    alt_text = re.findall(r"(?<!!)\[([^\[\]]*)\]", text)
+    tuples = []
+    for i in range(0, len(urls)):
+        trimmed_url = urls[i].replace("(", "").replace(")", "")
+        trimmed_alt = alt_text[i].replace("[", "").replace("]", "")
+        tuples.append((trimmed_alt, trimmed_url))
+    return tuples
         
 
 main()
