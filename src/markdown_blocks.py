@@ -89,7 +89,7 @@ def text_to_children(text, block_type):
                 for text_node in text_nodes:
                     nodes.append(text_node_to_html_node(text_node))
         case BlockType.UNORDERED:
-            text = text.replace("-", "").strip()
+            text = text.replace("- ", "").strip()
             lines = text.split("\n")
             for line in lines:
                 text_nodes = (text_to_textnodes(line))
